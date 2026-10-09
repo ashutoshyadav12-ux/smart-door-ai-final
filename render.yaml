@@ -1,0 +1,29 @@
+# Render Blueprint: one-click backend deploy (Render -> New -> Blueprint)
+services:
+  - type: web
+    name: smart-door-backend
+    runtime: docker
+    rootDir: backend
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "0"
+      - key: AI_BACKEND
+        value: mock
+      - key: IOT_MODE
+        value: demo
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false          # you type this in the Render dashboard
+      - key: DEVICE_API_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false          # e.g. https://your-app.vercel.app
+      - key: CORS_ALLOW_VERCEL
+        value: "1"
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false          # e.g. https://smart-door-backend.onrender.com

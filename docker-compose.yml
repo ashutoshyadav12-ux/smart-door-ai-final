@@ -1,0 +1,28 @@
+# Local / VPS stack: Django backend + Mosquitto broker.
+# Frontend goes on Vercel (or run `npm run dev` in ./frontend).
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    ports: ["1883:1883"]
+    volumes: ["./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf"]
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      args:
+        INSTALL_AI: "0"      # set to "1" for real InsightFace recognition (needs ~2GB RAM)
+    env_file: ./backend/.env
+    environment:
+      MQTT_HOST: mosquitto
+      SQLITE_PATH: /app/db/db.sqlite3
+      FACES_DIR: /data/faces
+    ports: ["8000:8000"]
+    volumes:
+      - backend_db:/app/db
+      - ./data:/data
+    depends_on: [mosquitto]
+    restart: unless-stopped
+
+volumes:
+  backend_db:
