@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_ROOT = (import.meta.env.VITE_API_URL || "http://localhost:8000").replace(/\/$/, "");
+export const API_ROOT = (import.meta.env.VITE_API_URL || "https://smart-door-backend-u32f.onrender.com").replace(/\/$/, "");
 
 const api = axios.create({ baseURL: `${API_ROOT}/api` });
 
